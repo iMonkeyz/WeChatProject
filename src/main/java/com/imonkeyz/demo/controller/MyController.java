@@ -40,4 +40,9 @@ public class MyController {
 		servletContext.setAttribute("joinCount", joinCount);
 		return "join";
 	}
+
+	@RequestMapping("/group")
+	public String groupInfoPage() {
+		return "group-info-page";
+	}
 }
