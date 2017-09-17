@@ -21,12 +21,12 @@
 	<context:component-scan base-package="com.imonkeyz.demo.*"/>
 
 	<!-- H2 DB -->
-	<bean id="h2TcpServer" class="org.h2.tools.Server" factory-method="createTcpServer" init-method="start" destroy-method="stop">
+	<!--<bean id="h2TcpServer" class="org.h2.tools.Server" factory-method="createTcpServer" init-method="start" destroy-method="stop">
 		<constructor-arg value="-tcp, -tcpAllowOthers"/>
 	</bean>
 	<bean id="h2WebServer" class="org.h2.tools.Server" factory-method="createWebServer" init-method="start" destroy-method="stop">
 		<constructor-arg value=""/>
-	</bean>
+	</bean>-->
 
 	<!-- DataSource -->
 	<bean id="h2dbcp" class="org.h2.jdbcx.JdbcConnectionPool" destroy-method="dispose">

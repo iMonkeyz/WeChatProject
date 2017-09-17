@@ -25,8 +25,10 @@
 						<span class="h5">${userInfo.sex == 1 ? '男' : '女'}</span>
 					</p>
 					<p>${userInfo.country} ${userInfo.province} ${userInfo.city}</p>
-					<p><a href="${pageContext.request.contextPath}/join/${userInfo.openId}" class="btn btn-primary"
-					      role="button">Join Group</a></p>
+					<p>
+						<%--<a href="${pageContext.request.contextPath}/join/${userInfo.openId}" class="btn btn-primary" role="button">Join Group</a>--%>
+						<a href="${pageContext.request.contextPath}/group-setting" class="btn btn-primary" role="button">Join Group</a>
+					</p>
 				</div>
 			</div>
 		</div>

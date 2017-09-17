@@ -1,0 +1,61 @@
+.group-banner {
+	padding-bottom: 10px;
+	background-color: #EFEFF4;
+	position: relative;
+}
+.group-title {
+	padding: 10px 0;
+}
+.group-split {
+	padding: 0 15px;
+}
+.group-split .line {
+	border-bottom: 1px solid #eee;
+}
+.group-datetime {
+	padding: 10px 0;
+}
+.desc-text {
+	color: #9B9B9B;
+}
+.group-info-container {
+	background-color: #EFEFF4;
+	padding: 10px 12px 45px 12px;
+	position: relative;
+}
+.group-info-container .info-panel {
+	padding: 10px 15px;
+	background-color: #FFFFFF;
+	border-radius: 4px;
+	margin-bottom: 10px;
+}
+.group-info-container .info-panel .info-panel-header {
+	position: relative;
+	margin-bottom: 10px;
+}
+.group-info-container .info-panel .info-panel-header .symbol {
+	width: 2px;
+	height: 16px;
+	background-color: green;
+	position: absolute;
+	top: -2px;
+}
+.group-info-container .info-panel .info-panel-header .header-text {
+	margin-left: 8px;
+}
+.group-info-container .info-panel .info-panel-content {
+
+}
+.group-info-container .info-panel .info-panel-content .avatar {
+	width: 64px; height: 64px;
+}
+.group-join {
+	height: 45px;
+}
+.group-join .join-button {
+	width: 98%;
+	height: 95%;
+	background-color: #09BB07;
+	font-weight: bold;
+	line-height: 2.428571;
+}
