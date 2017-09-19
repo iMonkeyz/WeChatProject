@@ -25,7 +25,7 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 	private JdbcConnectionPool h2dbcp;
 
 	public Long saveGroupInfo(GroupInfoData groupInfoData) throws SQLException {
-		String sql = " MERGE INTO WXGROUP.INFO (ID, NAME, DATETIME, INTRO, BANNER, AVATAR) KEY(ID) VALUES (?, ?, ?, ?, ?, ?) ";
+		String sql = " MERGE INTO WXGROUP.INFO (ID, NAME, DATETIME, INTRO, BANNER, AVATAR) KEY(ID) VALUES (?, ?, ?, ?, ?, ?, ?) ";
 		Long id = new Date().getTime();
 		Connection conn = h2dbcp.getConnection();
 		PreparedStatement pst = conn.prepareStatement(sql);
@@ -39,6 +39,10 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 
 		//save panels
 		savePanelInfo(conn, id, groupInfoData);
+
+		//save qrs
+		saveQR(conn, id, groupInfoData);
+
 		conn.close();
 		return id;
 	}
@@ -56,8 +60,26 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 		pst.executeBatch();
 	}
 
+	private void saveQR(Connection conn, Long id, GroupInfoData groupInfoData) throws SQLException {
+		clearQR(conn, id);
+		String sql = "INSERT INTO WXGROUP.QR (INFOID, DATA) VALUES(?, ?)";
+		PreparedStatement pst = conn.prepareStatement(sql);
+		for (String qr : groupInfoData.getQrs()) {
+			pst.setLong(1, id);
+			pst.setString(2, qr);
+			pst.addBatch();
+		}
+		pst.executeBatch();
+	}
+
 	private void clearPanelInfo(Connection conn, Long id) throws SQLException {
 		PreparedStatement pst = conn.prepareStatement(" DELETE FROM WXGROUP.PANEL WHERE INFOID=? ");
+		pst.setLong(1, id);
+		pst.executeUpdate();
+	}
+
+	private void clearQR(Connection conn, Long id) throws SQLException {
+		PreparedStatement pst = conn.prepareStatement(" DELETE FROM WXGROUP.QR WHERE INFOID=? ");
 		pst.setLong(1, id);
 		pst.executeUpdate();
 	}
@@ -76,7 +98,8 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 			String banner = rs.getString("BANNER");
 			String avatar = rs.getString("AVATAR");
 			List<PanelInfoData> infos = getPanels(conn, id);
-			groupInfoData = new GroupInfoData(id, name, datetime, intro, banner, avatar, infos);
+			List<String> qrs = getQrs(conn, id);
+			groupInfoData = new GroupInfoData(id, name, datetime, intro, banner, avatar, infos, qrs);
 		}
 		conn.close();
 		return groupInfoData;
@@ -94,6 +117,19 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 			infos.add(new PanelInfoData(title, content));
 		}
 		return infos;
+	}
+
+	private List<String> getQrs(Connection conn, Long id) throws SQLException {
+		List<String> qrs = new ArrayList<String>();
+		String sql = " SELECT * FROM WXGROUP.QR WHERE INFOID=? ";
+		PreparedStatement pst = conn.prepareStatement(sql);
+		pst.setLong(1, id);
+		ResultSet rs = pst.executeQuery();
+		while ( rs.next() ) {
+			String data = rs.getString("DATA");
+			qrs.add(data);
+		}
+		return qrs;
 	}
 
 	public boolean removeGroupInfoByID(Long id) {

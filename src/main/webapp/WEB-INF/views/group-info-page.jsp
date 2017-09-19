@@ -43,7 +43,7 @@
 				<div class="info-panel-content desc-text">
 					<div class="media">
 						<div class="media-left">
-							<img class="media-object img-circle avatar" src="${groupInfo.avatar }">
+							<img class="media-object img-circle img-avatar" src="${groupInfo.avatar }">
 						</div>
 						<div class="media-body">
 							${groupInfo.formattedIntro }
@@ -62,6 +62,15 @@
 					</div>
 				</div>
 			</c:forEach>
+			<div class="col-xs-12 info-panel">
+				<div class="info-panel-header">
+					<div class="symbol"></div>
+					<h5 class="header-text">用户信息</h5>
+				</div>
+				<div class="info-panel-content desc-text">
+					<div>${userInfo.nickname}</div>
+				</div>
+			</div>
 		</div>
 		<div class="row navbar-fixed-bottom">
 			<div class="col-xs-12 text-center group-join">

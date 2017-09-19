@@ -19,10 +19,13 @@ public class H2ServerStartup {
 	private final static String SQL_SCHEMA = "CREATE SCHEMA WXGROUP";
 
 	private final static String TABLE_INFO = "INFO";
-	private final static String SQL_WXGROUPINFO = "create table WXGROUP.INFO (ID bigint primary key, NAME varchar(255) not null, DATETIME varchar(16), INTRO text, BANNER longtext, AVATAR longtext)";
+	private final static String SQL_WXGROUP_INFO = "create table WXGROUP.INFO (ID bigint primary key, NAME varchar(255) not null, DATETIME varchar(16), INTRO text, BANNER text, AVATAR longtext, QR text)";
 
 	private final static String TABLE_PANEL = "PANEL";
-	private final static String SQL_WXGROUPPANEL = "create table WXGROUP.PANEL (ID int auto_increment primary key, INFOID bigint not null, TITLE varchar(255), CONTENT text)";
+	private final static String SQL_WXGROUP_PANEL = "create table WXGROUP.PANEL (ID int auto_increment primary key, INFOID bigint not null, TITLE varchar(255), CONTENT text)";
+
+	private final static String TABLE_QR = "QR";
+	private final static String SQL_WXGROUP_QR = "create table WXGROUP.QR (ID int auto_increment primary key, INFOID bigint not null, DATA text)";
 
 	private Server tcpServer = null;
 	private Server webServer = null;
@@ -49,8 +52,9 @@ public class H2ServerStartup {
 		//h2dbcp.setMaxConnections(10);
 		try {
 			initSchema();
-			initTable(TABLE_INFO, SQL_WXGROUPINFO);
-			initTable(TABLE_PANEL, SQL_WXGROUPPANEL);
+			initTable(TABLE_INFO, SQL_WXGROUP_INFO);
+			initTable(TABLE_PANEL, SQL_WXGROUP_PANEL);
+			initTable(TABLE_QR, SQL_WXGROUP_QR);
 			LOG.info("Database is OK !");
 			LOG.info("Database Status: MaxConnections = " + h2dbcp.getMaxConnections() + ", ActiveConnections = " + h2dbcp.getActiveConnections());
 		} catch (SQLException e) {

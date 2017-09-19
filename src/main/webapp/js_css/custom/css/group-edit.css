@@ -39,6 +39,9 @@ img {
 	display: none !important;
 }
 
+.qr-upload-panel {
+	position: absolute; width: 100%; bottom: -15px;
+}
 /* Responsive */
 @media only screen and (max-width: 768px) {
 	.group-banner {
