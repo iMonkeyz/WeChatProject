@@ -27,6 +27,9 @@ public class H2ServerStartup {
 	private final static String TABLE_QR = "QR";
 	private final static String SQL_WXGROUP_QR = "create table WXGROUP.QR (ID int auto_increment primary key, INFOID bigint not null, DATA text)";
 
+	private final static String TABLE_QR2OPENID="QR2OPENID";
+	private final static String SQL_WXGROUP_QR2OPENID = "create table WXGROUP.QR2OPENID(ID int auto_increment, QRID int, OPENID varchar(32), primary key (QRID, OPENID))";
+
 	private Server tcpServer = null;
 	private Server webServer = null;
 
@@ -55,6 +58,7 @@ public class H2ServerStartup {
 			initTable(TABLE_INFO, SQL_WXGROUP_INFO);
 			initTable(TABLE_PANEL, SQL_WXGROUP_PANEL);
 			initTable(TABLE_QR, SQL_WXGROUP_QR);
+			initTable(TABLE_QR2OPENID, SQL_WXGROUP_QR2OPENID);
 			LOG.info("Database is OK !");
 			LOG.info("Database Status: MaxConnections = " + h2dbcp.getMaxConnections() + ", ActiveConnections = " + h2dbcp.getActiveConnections());
 		} catch (SQLException e) {

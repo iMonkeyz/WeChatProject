@@ -34,7 +34,7 @@ UUID: <span id="uuid">${uuid}</span>
 		授权登录二维码: <img src="${pageContext.request.contextPath}/group/qr/auth/${uuid}" style="width: 256px;">
 	</div>
 	<div style="display: table-cell;">
-		群1505794165282分享二维码: <img src="${pageContext.request.contextPath}/group/qr/share/1505794165282" style="width: 256px;">
+		群1505901650830分享二维码: <img src="${pageContext.request.contextPath}/group/qr/share/1505901650830" style="width: 256px;">
 	</div>
 </div>
 <hr>

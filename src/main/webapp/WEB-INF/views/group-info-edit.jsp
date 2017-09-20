@@ -28,6 +28,7 @@
 					this.fileUpload();
 					this.addPanel();
 					this.removePanel();
+					this.removeQr();
 					this.saveAll();
 				},
 				fileUpload: function () {
@@ -46,6 +47,13 @@
 				removePanel: function () {
 					$(".group-info-container").on("click", ".btn-remove-panel", function () {
 						$(this).parents(".info-panel").remove();
+					});
+				},
+				removeQr: function () {
+					$(".panel-qr").on("click", ".btn-remove-qr", function () {
+						$(this).parents(".item-qr").animate({opacity: 0, transform: 'scale(0.001)'}, 'fast', function () {
+							$(this).remove();
+						});
 					});
 				},
 				saveAll: function () {
@@ -85,12 +93,20 @@
 
 						//do submit
 						$(".bs-example-modal-sm").modal("toggle");
+
+						//panel infos
 						var infos = [];
 						$(".info-panel:not(.intro-panel)").each(function () {
 							infos.push({
 								title: $(this).find("input[name='title']").val(),
 								content: $(this).find("textarea[name='content']").val()
 							});
+						});
+
+						//QRs
+						var qrs = [];
+						$(".item-qr:not(.template-qr)").each(function () {
+							qrs.push($(this).find(".img-qr").attr("src"));
 						});
 
 						var data = {
@@ -100,8 +116,8 @@
 							intro: $("textarea[name='intro']").val(),
 							banner: $(".img-banner").attr("src"),
 							avatar: $(".img-avatar").attr("src"),
-							qr: $(".img-qr").attr("src"),
-							infos: infos
+							infos: infos,
+							qrs: qrs
 						}
 
 						$.ajax({
@@ -128,6 +144,7 @@
 				init: function () {
 					this.dateTimePlugin();
 					this.fileUpload();
+					this.qrUpload();
 				},
 				dateTimePlugin: function () {
 					$(".valid_datetime").datetimepicker({
@@ -143,7 +160,7 @@
 					});
 				},
 				fileUpload: function () {
-					$(".input-file").on("change", function () {
+					$(".input-file:not(.file-qr)").on("change", function () {
 						var img = $(this).data("file-for");
 						if ( this.files || this.files[0] ) {
 							var file = this.files[0];
@@ -159,6 +176,31 @@
 							};
 							reader.readAsDataURL(file);
 						}
+					});
+				},
+				qrUpload: function () {
+					$(".img-qr").on("click", function () {
+						$(".file-qr").trigger("click");
+					});
+					$(".file-qr").on("change", function () {
+						if ( this.files || this.files[0] ) {
+							var qr = $(".template-qr").clone().removeClass("template-qr");
+							var file = this.files[0];
+							var kb = (file.size / 1024).toFixed(2);
+							if ( kb > 500 ) {
+								alert("请上传小于500K的图片.")
+								return;
+							}
+							var reader = new FileReader();
+							reader.onloadend = function () {
+								var dataURL = reader.result;
+								$(qr).find("img").attr("src", dataURL);
+							};
+							reader.readAsDataURL(file);
+							$(".panel-qr").prepend(qr);
+							$(this).val("");
+						}
+
 					});
 				}
 			}
@@ -274,23 +316,21 @@
 				<div class="panel-heading">
 					<h3 class="panel-title">第 3 步: 设定群二维码</h3>
 				</div>
-				<div class="panel-body">
-					<div class="col-xs-12">
-						<div class="row text-center">
-							<p>
-								<img src="${pageContext.request.contextPath}/img/default_qr.png" class="img-responsive center-block img-qr" style="max-width: 256px; max-height: 256px;">
-							</p>
-							<p>
-								<input type="file" class="input-file file-qr" data-file-for=".img-qr"/>
-								<button class="btn btn-xs btn-primary btn-file-upload" data-trigger-of=".file-qr">二维码上传</button>
-							</p>
-						</div>
-						<div class="row text-center" style="padding: 5px;">
-							<div class="input-group input-group-sm">
-								<span class="input-group-addon">限制分享次数</span>
-								<input class="form-control input-sm text-center" maxlength="3" type="text" placeholder="100">
-								<span class="input-group-addon">(最大100)</span>
+				<div class="panel-body text-center panel-qr">
+					<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 item-qr template-qr">
+						<div class="ui-flex justify-center center content-qr">
+							<div class="btn-remove-qr">
+								<a class="btn btn-xs btn-danger glyphicon glyphicon-trash"></a>
 							</div>
+							<img src="${pageContext.request.contextPath}/img/add.png" class="img-responsive center-block img-qr">
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<input type="file" class="input-file file-qr"/>
+						<div class="input-group input-group-sm">
+							<span class="input-group-addon">限制分享次数</span>
+							<input class="form-control input-sm text-center" maxlength="3" type="text" placeholder="100">
+							<span class="input-group-addon">(最大100)</span>
 						</div>
 					</div>
 				</div>

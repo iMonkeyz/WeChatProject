@@ -29,6 +29,7 @@ public class WeChatServiceImpl implements WeChatService {
 		Long id = null;
 		try {
 			id = wxGroupDAO.saveGroupInfo(groupInfoData);
+			LOG.info("GroupInfo has been saved with Unique ID: " + id);
 		} catch (SQLException e) {
 			LOG.error("Errors while saving GroupInfo", e);
 		}

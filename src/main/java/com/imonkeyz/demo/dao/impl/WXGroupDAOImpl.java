@@ -25,7 +25,7 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 	private JdbcConnectionPool h2dbcp;
 
 	public Long saveGroupInfo(GroupInfoData groupInfoData) throws SQLException {
-		String sql = " MERGE INTO WXGROUP.INFO (ID, NAME, DATETIME, INTRO, BANNER, AVATAR) KEY(ID) VALUES (?, ?, ?, ?, ?, ?, ?) ";
+		String sql = " MERGE INTO WXGROUP.INFO (ID, NAME, DATETIME, INTRO, BANNER, AVATAR) KEY(ID) VALUES (?, ?, ?, ?, ?, ?) ";
 		Long id = new Date().getTime();
 		Connection conn = h2dbcp.getConnection();
 		PreparedStatement pst = conn.prepareStatement(sql);

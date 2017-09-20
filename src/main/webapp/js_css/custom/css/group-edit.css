@@ -38,10 +38,60 @@ img {
 .input-file {
 	display: none !important;
 }
+.img-qr {
 
-.qr-upload-panel {
-	position: absolute; width: 100%; bottom: -15px;
 }
+/* css for QR */
+.panel-qr .item-qr {
+	margin: 0 0 10px 0;
+}
+.panel-qr .item-qr .content-qr {
+	width: 150px; height: 150px; position: relative; border:1px dashed red;
+}
+.panel-qr .item-qr img {
+	border: none;
+}
+.panel-qr .item-qr .content-qr .btn-remove-qr {
+	position: absolute; right: 0; bottom: 0;
+}
+.panel-qr .item-qr.template-qr .content-qr {
+	border: none;
+	cursor: pointer;
+}
+.panel-qr .item-qr.template-qr .content-qr .btn-remove-qr {
+	display: none;
+}
+
+/* global flex display */
+.ui-flex {
+	display: -webkit-box !important;
+	display: -webkit-flex !important;
+	display: -ms-flexbox !important;
+	display: flex !important;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap
+}
+.ui-flex, .ui-flex *, .ui-flex :after, .ui-flex :before {
+	box-sizing: border-box
+}
+.ui-flex.justify-center {
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center
+}
+.ui-flex.center {
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center
+}
+
 /* Responsive */
 @media only screen and (max-width: 768px) {
 	.group-banner {

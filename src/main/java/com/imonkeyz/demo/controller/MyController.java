@@ -71,9 +71,7 @@ public class MyController {
 
 	@RequestMapping(value = "/group/save", method = RequestMethod.POST)
 	public @ResponseBody Long save(@RequestBody GroupInfoData groupInfoData) {
-		Long id = weChatService.save(groupInfoData);
-		LOG.info("GroupInfoData has been saved with Unique ID: " + id);
-		return id;
+		return weChatService.save(groupInfoData);
 	}
 
 	@RequestMapping(value = "/group/share/{id}", method = RequestMethod.GET)
