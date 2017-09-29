@@ -17,19 +17,14 @@
 	<script src="${pageContext.request.contextPath}/js_css/bootstrap/js/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-<div class="container">
-	<div class="row">
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">加入次数: ${joinCount}</h3>
-			</div>
-			<div class="panel-body">
-				<img class="img-responsive"
-				     src="${pageContext.request.contextPath}/js_css/Screenshot_20170811-220254.png">
-			</div>
-		</div>
+<div class="container text-center">
+	<div class="row" style="margin-top: 30%">
+		<img class="img-responsive center-block" src="${pageContext.request.contextPath}/img/default_qr.png" style="width: 200px; height: 200px;">
 	</div>
-
+	<div class="row" style="margin-top: 15px; color: #adadad">
+		- 请长按二维码进行识别 -
+	</div>
+</div>
 </div>
 
 </body>

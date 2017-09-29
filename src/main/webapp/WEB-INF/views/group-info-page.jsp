@@ -8,7 +8,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>群信息介绍页</title>
+	<title>${groupInfo.name}</title>
 	<link href="${pageContext.request.contextPath}/js_css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link href="${pageContext.request.contextPath}/js_css/custom/css/group-info.css" rel="stylesheet">
 	<script src="${pageContext.request.contextPath}/js_css/bootstrap/js/jquery-1.9.1.min.js"></script>
@@ -74,7 +74,15 @@
 		</div>
 		<div class="row navbar-fixed-bottom">
 			<div class="col-xs-12 text-center group-join">
-				<a class="btn btn-success join-button" href="${pageContext.request.contextPath}/group-setting">我要入群</a>
+				<c:choose>
+					<c:when test="${adminMode}">
+						<a class="btn btn-success join-button" href="${pageContext.request.contextPath}/group/admin">返回</a>
+					</c:when>
+					<c:otherwise>
+						<a class="btn btn-success join-button" href="${pageContext.request.contextPath}/group/share/${groupInfo.id}/join">我要入群</a>
+					</c:otherwise>
+				</c:choose>
+
 			</div>
 		</div>
 	</div>

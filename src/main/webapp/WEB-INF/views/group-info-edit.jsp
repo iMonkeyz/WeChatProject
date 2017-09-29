@@ -30,6 +30,7 @@
 					this.removePanel();
 					this.removeQr();
 					this.saveAll();
+					this.btnCancel();
 				},
 				fileUpload: function () {
 					$(".btn-file-upload").on("click", function () {
@@ -110,7 +111,7 @@
 						});
 
 						var data = {
-							id: null,
+							id: $("input[name='id']").val() || null,
 							name: $("input[name='name']").val(),
 							datetime: $("input[name='datetime']").val(),
 							intro: $("textarea[name='intro']").val(),
@@ -121,23 +122,31 @@
 						}
 
 						$.ajax({
-							url: "/wx/group/save",
+							url: "/wx/group/admin/save",
 							type: "POST",
 							contentType: "application/json",
 							data: JSON.stringify(data),
 							dataType: "json",
 							success: function (data) {
 								$(".btn-save").addClass("disabled");
-								$(".btn-preview").attr("href", "/wx/group/share/" + data).removeClass("disabled");
 								console.log(data);
 								$(".bs-example-modal-sm").modal("toggle");
-								alert("创建成功, 您现在可以点击预览查看结果!");
+								alert("创建成功!");
+								location.href = "/wx/group/admin/view/" + data;
 							},
 							error: function (data) {
-								console.log(data);
+								alert("创建失败: " + data);
+								location.reload();
 							}
 						})
 					});
+				},
+				btnCancel: function () {
+					$(".btn-cancel").on("click", function () {
+						if ( confirm("未保存内容将会丢失, 确认放弃吗?") ) {
+							history.back(-1);
+						}
+					})
 				}
 			},
 			Events: {
@@ -219,7 +228,7 @@
 				<div style="color: #ffffff; font-size: large;"><b>创建群分享内容页</b></div>
 			</div>
 			<div class="col-xs-6 text-right">
-				<a class="btn btn-sm btn-info btn-preview disabled">预&nbsp;览</a>
+				<a class="btn btn-sm btn-danger btn-cancel">放&nbsp;弃</a>
 				<a class="btn btn-sm btn-success btn-save" data-target=".bs-example-modal-sm">保&nbsp;存</a>
 			</div>
 
@@ -227,6 +236,9 @@
 	</div>
 </div>
 <div class="container">
+	<c:if test="${not empty groupInfo}">
+		<input type="hidden" name="id" value="${groupInfo.id}"/>
+	</c:if>
 	<div class="row step-1">
 		<div class="col-xs-12">
 			<div class="panel panel-default">
@@ -238,7 +250,8 @@
 						<div class="banner-upload-panel text-center">
 							<button class="btn btn-xs btn-primary btn-file-upload" data-trigger-of=".file-banner">图片上传</button>
 						</div>
-						<img class="img-responsive center-block img-banner" src="${pageContext.request.contextPath}/img/default_banner.png">
+						<c:set var="defaultBanner" value="${pageContext.request.contextPath}/img/default_banner.png"/>
+						<img class="img-responsive center-block img-banner" src="${empty groupInfo ? defaultBanner : groupInfo.banner}">
 						<input type="file" class="input-file file-banner" data-file-for=".img-banner"/>
 					</div>
 				</div>
@@ -254,7 +267,7 @@
 				<div class="panel-body">
 					<div class="row group-title">
 						<div class="col-xs-12">
-							<input type="text" class="input-field" placeholder="请在此处输入 群名称" name="name"/>
+							<input type="text" class="input-field" placeholder="请在此处输入 群名称" name="name" value="${groupInfo.name}"/>
 						</div>
 					</div>
 					<div class="row group-split">
@@ -266,7 +279,7 @@
 						</div>
 						<div class="col-xs-6 text-right">
 							<div class="input-group input-group-sm date valid_datetime" data-date-format="dd MM yyyy" data-link-format="yyyy-mm-dd">
-								<input class="form-control input-sm" size="16" type="text" placeholder="请选择时间" name="datetime">
+								<input class="form-control input-sm" size="16" type="text" placeholder="请选择时间" name="datetime" value="${groupInfo.datetime}">
 								<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 							</div>
 						</div>
@@ -283,28 +296,53 @@
 							<div class="info-panel-content desc-text">
 								<div class="media">
 									<div class="media-left text-center">
-										<img class="media-object img-circle img-avatar" src="${pageContext.request.contextPath}/img/avatar.png">
+										<c:set var="defaultAvatar" value="${pageContext.request.contextPath}/img/avatar.png"/>
+										<img class="media-object img-circle img-avatar" src="${empty groupInfo ? defaultAvatar : groupInfo.avatar}">
 										<input type="file" class="input-file file-avatar" data-file-for=".img-avatar"/>
 										<button class="btn btn-xs btn-primary btn-file-upload" data-trigger-of=".file-avatar">头像上传</button>
 									</div>
 									<div class="media-body">
-										<textarea class="input-field" name="intro"></textarea>
+										<textarea class="input-field" name="intro">${groupInfo.intro}</textarea>
 									</div>
 								</div>
 							</div>
 						</div>
-						<div class="col-xs-12 info-panel info-panel-template">
-							<div class="remove-panel">
-								<button class="btn btn-xs btn-danger btn-remove-panel glyphicon glyphicon-trash"></button>
-							</div>
-							<div class="info-panel-header">
-								<div class="symbol"></div>
-								<h5 class="header-text"><input type="text" class="input-field" value="群介绍" placeholder="请在此处输入标题" name="title"/></h5>
-							</div>
-							<div class="info-panel-content desc-text">
-								<textarea class="input-field" placeholder="请在此处输内容..." name="content">请在此输入群介绍内容...</textarea>
-							</div>
-						</div>
+						<c:choose>
+							<c:when test="${empty groupInfo}">
+								<div class="col-xs-12 info-panel info-panel-template">
+									<div class="remove-panel">
+										<button class="btn btn-xs btn-danger btn-remove-panel glyphicon glyphicon-trash"></button>
+									</div>
+									<div class="info-panel-header">
+										<div class="symbol"></div>
+										<h5 class="header-text">
+											<input type="text" class="input-field" placeholder="请在此处输入标题" name="title" value="群介绍"/>
+										</h5>
+									</div>
+									<div class="info-panel-content desc-text">
+										<textarea class="input-field" placeholder="请在此处输内容..." name="content">请在此输入群介绍内容...</textarea>
+									</div>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<c:forEach items="${groupInfo.infos}" var="info" varStatus="status">
+									<div class="col-xs-12 info-panel ${status.first ? 'info-panel-template' : ''}">
+										<div class="remove-panel">
+											<button class="btn btn-xs btn-danger btn-remove-panel glyphicon glyphicon-trash"></button>
+										</div>
+										<div class="info-panel-header">
+											<div class="symbol"></div>
+											<h5 class="header-text">
+												<input type="text" class="input-field" placeholder="请在此处输入标题" name="title" value="${info.title}"/>
+											</h5>
+										</div>
+										<div class="info-panel-content desc-text">
+											<textarea class="input-field" placeholder="请在此处输内容..." name="content">${info.content}</textarea>
+										</div>
+									</div>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 			</div>
@@ -317,6 +355,16 @@
 					<h3 class="panel-title">第 3 步: 设定群二维码</h3>
 				</div>
 				<div class="panel-body text-center panel-qr">
+					<c:forEach items="${groupInfo.qrs}" var="qrData">
+						<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 item-qr">
+							<div class="ui-flex justify-center center content-qr">
+								<div class="btn-remove-qr">
+									<a class="btn btn-xs btn-danger glyphicon glyphicon-trash"></a>
+								</div>
+								<img src="${qrData}" class="img-responsive center-block img-qr">
+							</div>
+						</div>
+					</c:forEach>
 					<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 item-qr template-qr">
 						<div class="ui-flex justify-center center content-qr">
 							<div class="btn-remove-qr">
@@ -327,11 +375,14 @@
 					</div>
 					<div class="col-xs-12">
 						<input type="file" class="input-file file-qr"/>
-						<div class="input-group input-group-sm">
-							<span class="input-group-addon">限制分享次数</span>
-							<input class="form-control input-sm text-center" maxlength="3" type="text" placeholder="100">
-							<span class="input-group-addon">(最大100)</span>
-						</div>
+						<fieldset disabled>
+							<div class="input-group input-group-sm">
+								<span class="input-group-addon">限制分享次数</span>
+								<input class="form-control input-sm text-center" maxlength="3" type="text" placeholder="100">
+								<span class="input-group-addon">(最大100)</span>
+							</div>
+						</fieldset>
+
 					</div>
 				</div>
 			</div>

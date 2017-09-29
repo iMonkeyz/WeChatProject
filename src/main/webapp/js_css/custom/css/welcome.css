@@ -1,0 +1,26 @@
+.page-header {
+	padding: 0 10px;
+}
+.page-header .btn-exit {
+	margin-top: 5px;
+}
+.desc-text {
+	margin-top: 5px;
+	color: #9d9d9d;
+}
+.info-block .thumbnail {
+	position: relative;
+}
+.info-block .thumbnail .glyphicon-trash {
+	position: absolute; right:4px; top:4px;
+}
+.info-block .thumbnail img {
+	height: 150px;
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+	.info-block .thumbnail img {
+		height: auto;
+	}
+}

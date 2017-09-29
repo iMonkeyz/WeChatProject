@@ -41,6 +41,10 @@ public class MyController {
 		map.put("userInfo", userInfo);
 		return "index";
 	}
+	@RequestMapping("/group/demo")
+	public String demo() {
+		return "group-demo";
+	}
 
 	@RequestMapping(value = "/join/{openid}", method = RequestMethod.GET)
 	public String join(@PathVariable String openid, ModelMap map) {
@@ -55,16 +59,31 @@ public class MyController {
 		return "join";
 	}
 
-	@RequestMapping("/group")
+	/*
+	@RequestMapping(value = "/group/share/{id}/join", method = RequestMethod.GET)
+	public String groupJoin(@PathVariable String id, ModelMap map) {
+		try {
+			String openId = (String) request.getSession().getAttribute(id);
+			String qrData = weChatService.qr2OpendId(id, openId);
+			map.addAttribute("qrData", qrData);
+		} catch (Exception e) {
+			LOG.info("No available OPENID can be found to join.");
+		}
+		return "group-join";
+	}
+	*/
+
+	/*@RequestMapping("/group")
 	public String groupInfoPage() {
 		return "group-info-page";
-	}
-	@RequestMapping("/group-setting")
+	}*/
+
+	/*@RequestMapping("/group-setting")
 	public String groupInfoSettingPage() {
 		return "group-info-edit";
-	}
+	}*/
 
-	@RequestMapping(value = "/img/save", method = RequestMethod.POST)
+	/*@RequestMapping(value = "/img/save", method = RequestMethod.POST)
 	public void saveImage(@RequestParam String base64, ModelMap model) {
 		System.out.println(base64);
 	}
@@ -72,8 +91,9 @@ public class MyController {
 	@RequestMapping(value = "/group/save", method = RequestMethod.POST)
 	public @ResponseBody Long save(@RequestBody GroupInfoData groupInfoData) {
 		return weChatService.save(groupInfoData);
-	}
+	}*/
 
+	/*
 	@RequestMapping(value = "/group/share/{id}", method = RequestMethod.GET)
 	public String share(@RequestParam(required = false) String code, @PathVariable Long id, ModelMap map) {
 		//http://localhost:8090/wx/group/share/1505794165282
@@ -89,24 +109,32 @@ public class MyController {
 		}
 		UserInfoData userInfoData = WxUtil.getUserInfo(code);
 		GroupInfoData groupInfoData = weChatService.find(id);
+
+		//保存用户信息到session
+		request.getSession().setAttribute(Long.toString(id), userInfoData.getOpenId());
+
 		map.put("userInfo", userInfoData);
 		map.put("groupInfo", groupInfoData);
 		return "group-info-page";
 	}
+	*/
 
-	@RequestMapping(value = "/group/admin/login")
+	/*@RequestMapping(value = "/group/admin/login")
 	public String adminLoginPage(ModelMap map) {
 		String uuid = UUID.randomUUID().toString().replaceAll("-", "");
 		map.put("uuid", uuid);
 		return "group-admin-login";
-	}
+	}*/
+/*
 
-	/**
+	*/
+/**
 	 * 用户管理授权登录二维码
 	 * @param uuid
 	 * @param response
 	 * @throws IOException
-	 */
+	 *//*
+
 	@RequestMapping(value = "/group/qr/auth/{uuid}")
 	public void genQr(@PathVariable String uuid, HttpServletResponse response) throws IOException {
 		BufferedImage img = QRUtil.qRCodeBufImg("http://imonkeyz.ngrok.cc/wx/group/qr/scan/" + uuid);
@@ -115,17 +143,19 @@ public class MyController {
 		ImageIO.write(img, "png", out);
 	}
 
-	/**
+	*/
+/**
 	 * 群信息分享页面二维码
 	 * @param groupId
 	 * @param response
 	 * @throws IOException
-	 */
+	 *//*
+
 	@RequestMapping(value = "/group/qr/share/{groupId}")
 	public void groupSahreQr(@PathVariable String groupId, HttpServletResponse response) throws IOException {
 		StringBuilder sb = new StringBuilder("https://open.weixin.qq.com/connect/oauth2/authorize?");
 		sb.append("appid=wxac058681c6aff3a8");
-		sb.append("&redirect_uri=http%3A%2F%2Fimonkeyz.ngrok.cc%2Fwx%2Fgroup%2Fshare%2F").append(groupId);
+		sb.append("&redirect_uri=http%3A%2F%2F7amphm.natappfree.cc%2Fwx%2Fgroup%2Fshare%2F").append(groupId);
 		sb.append("&response_type=code");
 		sb.append("&scope=snsapi_userinfo");
 		sb.append("&state=").append(groupId);
@@ -135,13 +165,14 @@ public class MyController {
 		ServletOutputStream out = response.getOutputStream();
 		ImageIO.write(img, "png", out);
 	}
+*/
 
 	/**
 	 * 扫描二维码跳转到授权页面
 	 * @param uuid
 	 * @return
 	 */
-	@RequestMapping(value = "/group/qr/scan/{uuid}")
+	/*@RequestMapping(value = "/group/qr/scan/{uuid}")
 	public String scanQr(@PathVariable String uuid) {
 		StringBuilder sb = new StringBuilder("https://open.weixin.qq.com/connect/oauth2/authorize?");
 		sb.append("appid=wxac058681c6aff3a8");
@@ -151,9 +182,9 @@ public class MyController {
 		sb.append("&state=").append(uuid);
 		sb.append("#wechat_redirect");
 		return  "redirect:" + sb.toString();
-	}
+	}*/
 
-	@RequestMapping(value = "/group/admin/authorization", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/group/admin/authorization", method = RequestMethod.GET)
 	public String authorization(@RequestParam String code, @RequestParam("state") String uuid) {
 		LOG.info("接收到授权请求 CODE: " + code + ", STATE(UUID): " + uuid);
 		UserInfoData userInfo = WxUtil.getUserInfo(code);
@@ -164,11 +195,11 @@ public class MyController {
 		} else {
 			return "unauthorized";
 		}
-	}
+	}*/
 
-	@RequestMapping(value = "/group/admin/validation/{uuid}")
+	/*@RequestMapping(value = "/group/admin/validation/{uuid}")
 	public @ResponseBody boolean validation(@PathVariable String uuid) {
-		/*LOG.info("请求验证UUID: " + uuid);*/
+		*//*LOG.info("请求验证UUID: " + uuid);*//*
 		long validMs = 60 * 2 * 1000L;  //2 minutes
 		Object o = request.getSession().getServletContext().getAttribute(uuid);
 		if ( o != null ) {
@@ -180,5 +211,5 @@ public class MyController {
 			return now - ms < validMs;
 		}
 		return false;
-	}
+	}*/
 }

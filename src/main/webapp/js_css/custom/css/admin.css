@@ -1,0 +1,163 @@
+html, body {
+	height: 100%;
+}
+.ui-flex {
+	display: -webkit-box !important;
+	display: -webkit-flex !important;
+	display: -ms-flexbox !important;
+	display: flex !important;
+	-webkit-flex-wrap: wrap;
+	-ms-flex-wrap: wrap;
+	flex-wrap: wrap
+}
+.ui-flex, .ui-flex *, .ui-flex :after, .ui-flex :before {
+	box-sizing: border-box
+}
+.ui-flex.justify-center {
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center
+}
+.ui-flex.center {
+	-webkit-box-pack: center;
+	-webkit-justify-content: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+	-webkit-box-align: center;
+	-webkit-align-items: center;
+	-ms-flex-align: center;
+	align-items: center
+}
+body {
+	font-family: Helvetica Neue,Helvetica,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
+	background: url('../img/login_bg.jpg') no-repeat 50%;
+	background-size: cover;
+}
+.login {
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+}
+.login .login_box {
+	position: absolute;
+	width: 380px;
+	height: 540px;
+	-webkit-border-radius: 4px;
+	background-color: #fff;
+}
+.login_box .qrcode {
+	position: relative;
+	text-align: center;
+}
+.login_box .qrcode .img {
+	display: block;
+	width: 270px;
+	height: 270px;
+	margin: 42px auto 12px;
+}
+.login_box .qrcode .sub_title {
+	text-align: center;
+	font-size: 20px;
+	color: #353535;
+	margin-bottom: 20px;
+}
+.login_box .qrcode .sub_desc {
+	text-align: center;
+	color: #888;
+	font-size: 18px;
+}
+.login_box .logo {
+	margin-top: 30px;
+}
+.login_box .logo .icon {
+	max-width: 64px;
+}
+.login_box .qrcode .need-refresh {
+	display: none;
+}
+.login_box .qrcode .refresh_qrcode_mask {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 270px;
+}
+
+.login_box .qrcode .need-refresh .refresh {
+	position: absolute;
+	cursor: pointer;
+	text-align: center;
+	background: #ffffff;
+	-webkit-border-radius: 24px;
+	-moz-border-radius: 24px;
+	border-radius: 48px;
+}
+.icon-refresh {
+	margin: 10px;
+	width: 48px;
+	height: 48px;
+	background: url('../img/refresh.png') no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+}
+.login_box.expired .qrcode .img {
+	opacity: .1;
+}
+.login_box.expired .qrcode .waiting-scan {
+	display: none;
+}
+.login_box.expired .qrcode .need-refresh {
+	display: block;
+}
+/* animate */
+.rotateLoading {
+	-webkit-animation: rotateLoading ease 1s;
+	animation: rotateLoading ease 1s;
+}
+
+@-webkit-keyframes rotateLoading {
+	0% {
+		-webkit-transform: rotate(0);
+		transform: rotate(0);
+	}
+
+	to {
+		-webkit-transform: rotate(2turn);
+	}
+}
+
+@keyframes rotateLoading {
+	0% {
+		-webkit-transform: rotate(0);
+		transform: rotate(0);
+	}
+
+	to {
+		-webkit-transform: rotate(2turn);
+	}
+}
+
+/* Responsive */
+@media only screen and (max-width: 768px) {
+	.login .login_box {
+		background-color: rgba(255,255,255,0);
+		height: auto;
+	}
+	.login .login_box .img {
+		width: auto;
+		height:auto;
+	}
+	.login_box .qrcode .refresh_qrcode_mask {
+		height: 130px;
+	}
+	.icon-refresh {
+		width: 32px;
+		height: 32px;
+	}
+	.login_box .qrcode .sub_desc {
+		color: #333;
+	}
+}

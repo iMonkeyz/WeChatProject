@@ -1,0 +1,38 @@
+html, body {
+	height: 100%;
+}
+.full {
+	height: 100%;
+}
+.info-box {
+	width: 100%;
+}
+.info-box .text-box {
+	margin: 15px 0;
+}
+.info-box .sub_title {
+	font-size: 20px;
+	color: #353535;
+}
+.info-box .sub_desc {
+	color: #888;
+	font-size: 18px;
+}
+.icon-success {
+	width: 64px;
+	height: 64px;
+	background: url('../img/success.png') no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+}
+.icon-fail {
+	width: 64px;
+	height: 64px;
+	background: url('../img/fail.png') no-repeat;
+	display: inline-block;
+	vertical-align: middle;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+}

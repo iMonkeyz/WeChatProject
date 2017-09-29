@@ -18,6 +18,20 @@ public class UserInfoData extends BaseData {
 	private String privilege;
 	private String unionid;
 
+	private long authMs;
+
+	public UserInfoData(String openId, String nickname, String sex, String province, String city, String country, String headimgurl, String privilege, String unionid) {
+		this.openId = openId;
+		this.nickname = nickname;
+		this.sex = sex;
+		this.province = province;
+		this.city = city;
+		this.country = country;
+		this.headimgurl = headimgurl;
+		this.privilege = privilege;
+		this.unionid = unionid;
+	}
+
 	public UserInfoData(String errCode, String errMsg) {
 		super(errCode, errMsg);
 	}

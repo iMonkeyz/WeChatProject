@@ -1,19 +1,30 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<%--
+  Created by IntelliJ IDEA.
+  User: Jesse
+  Date: 2017/8/12
+  Time: 3:07
+  To change this template use File | Settings | File Templates.
+--%>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>授权失败页面</title>
+	<title>群二维码</title>
 	<link href="${pageContext.request.contextPath}/js_css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="${pageContext.request.contextPath}/js_css/custom/css/group-info.css" rel="stylesheet">
 	<script src="${pageContext.request.contextPath}/js_css/bootstrap/js/jquery-1.9.1.min.js"></script>
 </head>
 <body>
-	<h3 style="color: red;">授权失败!</h3>
+<div class="container text-center">
+	<div class="row" style="margin-top: 30%">
+		<img class="img-responsive center-block" src="${qrData}" style="width: 200px; height: 200px;">
+	</div>
+	<div class="row" style="margin-top: 15px; color: #adadad">
+		- 请长按二维码进行识别 -
+	</div>
+</div>
+
 </body>
 </html>

@@ -11,12 +11,14 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class WxUtil {
+	private final static Logger LOG = Logger.getLogger(WxUtil.class);
 	private final static String APPID = "wxac058681c6aff3a8";
 	private final static String APPSECRET = "dfc57f2678815c07f9f9237a6f95a2e0";
 	private final static String TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=SECRET";
@@ -41,7 +43,7 @@ public class WxUtil {
 			long expiresIn = Long.parseLong(json.get("expires_in").getAsString());
 			accessTokenData = new AccessTokenData(accessToken, expiresIn);
 		}
-		System.out.println("获取到AccessTokenData=" + accessTokenData);
+		LOG.info("获取到AccessTokenData=" + accessTokenData);
 		return accessTokenData;
 	}
 
@@ -67,7 +69,7 @@ public class WxUtil {
 			}
 			accessTokenMap.put(code, accessTokenData);
 		}
-		System.out.println("获取到AccessTokenData=" + accessTokenData);
+		LOG.info("获取到AccessTokenData=" + accessTokenData);
 		return accessTokenData;
 	}
 
@@ -102,12 +104,12 @@ public class WxUtil {
 		} else {
 			userInfoData = new UserInfoData(accessToken.getErrCode(), accessToken.getErrMsg());
 		}
-		System.out.println("获取到UserInfoData=" + userInfoData);
+		LOG.info("获取到UserInfoData=" + userInfoData);
 		return userInfoData;
 	}
 
 	private static JsonObject getJSON(final String url) {
-		System.out.println("GET " + url);
+		LOG.info("GET " + url);
 		HttpGet get = new HttpGet(url);
 		CloseableHttpClient client = HttpClients.createDefault();
 		get.setConfig(requestConfig);

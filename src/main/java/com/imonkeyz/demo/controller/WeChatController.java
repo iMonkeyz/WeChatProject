@@ -23,7 +23,7 @@ public class WeChatController {
 
 	@RequestMapping(value = "/")
 	public String index() {
-		return "index";
+		return "redirect:/group/admin";
 	}
 
 	@RequestMapping(value = "/connect", method = RequestMethod.GET)

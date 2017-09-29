@@ -34,10 +34,11 @@ UUID: <span id="uuid">${uuid}</span>
 		授权登录二维码: <img src="${pageContext.request.contextPath}/group/qr/auth/${uuid}" style="width: 256px;">
 	</div>
 	<div style="display: table-cell;">
-		群1505901650830分享二维码: <img src="${pageContext.request.contextPath}/group/qr/share/1505901650830" style="width: 256px;">
+		群 1506311181905 分享二维码: <img src="${pageContext.request.contextPath}/group/qr/share/1506311181905" style="width: 256px;">
 	</div>
 </div>
 <hr>
 <div id="result"></div>
 </body>
 </html>
+774fe8b1df9a448ab35b5a85fc53737c
