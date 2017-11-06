@@ -46,7 +46,8 @@ img {
 	margin: 0 0 10px 0;
 }
 .panel-qr .item-qr .content-qr {
-	width: 150px; height: 150px; position: relative; border:1px dashed red;
+	/*width: 150px; height: 150px; */
+	position: relative; border:1px dashed red;
 }
 .panel-qr .item-qr img {
 	border: none;
@@ -100,6 +101,6 @@ img {
 	}
 
 	.panel-qr .item-qr .content-qr {
-		width: 128px; height: 128px;
+		/*width: 128px; height: 128px;*/
 	}
 }

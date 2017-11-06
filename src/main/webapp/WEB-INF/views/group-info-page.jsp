@@ -68,7 +68,7 @@
 					<h5 class="header-text">用户信息</h5>
 				</div>
 				<div class="info-panel-content desc-text">
-					<div>${userInfo.nickname}</div>
+					<div>${sessionScope.GUEST.nickname}</div>
 				</div>
 			</div>
 		</div>

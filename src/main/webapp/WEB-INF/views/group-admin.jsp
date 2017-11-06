@@ -8,9 +8,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>后台管理</title>
+	<title>群分享发布系统</title>
 	<link href="${pageContext.request.contextPath}/js_css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<%--<link href="${pageContext.request.contextPath}/js_css/custom/css/group-edit.css" rel="stylesheet">--%>
 	<script src="${pageContext.request.contextPath}/js_css/bootstrap/js/jquery-1.9.1.min.js"></script>
 </head>
 <body>

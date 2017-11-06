@@ -15,16 +15,35 @@
 	<title>群二维码</title>
 	<link href="${pageContext.request.contextPath}/js_css/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<script src="${pageContext.request.contextPath}/js_css/bootstrap/js/jquery-1.9.1.min.js"></script>
+	<style>
+		.mask {
+			position: absolute;
+			width: 100%;
+			height: 70px;
+			background-color: #FFFFFF;
+		}
+		.mask-header {
+			top: 0;
+		}
+		.mask-footer {
+			bottom: 0;
+		}
+		.mask-footer.desc-text {
+			color: #adadad;
+		}
+	</style>
 </head>
-<body>
+<body style="overflow: hidden;">
 <div class="container text-center">
-	<div class="row" style="margin-top: 30%">
-		<img class="img-responsive center-block" src="${qrData}" style="width: 200px; height: 200px;">
-	</div>
-	<div class="row" style="margin-top: 15px; color: #adadad">
-		- 请长按二维码进行识别 -
+	<div class="row">
+		<div class="col-xs-offset-1 col-xs-10">
+			<div class="row" style="position:relative;">
+				<div class="mask mask-header"></div>
+				<img class="img-responsive center-block" src="${qrData}" <%--style="width: 200px; height: 200px;"--%>>
+				<div class="mask mask-footer desc-text text-center">- 请长按二维码进行识别 -</div>
+			</div>
+		</div>
 	</div>
 </div>
-
 </body>
 </html>

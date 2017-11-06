@@ -67,12 +67,12 @@ public class GroupAdminController extends GroupBaseController{
 	@RequestMapping(value = "/exit", method = RequestMethod.GET)
 	public String logOff(ModelMap map) {
 		request.getSession().invalidate();
-		return "group-admin";
+		return "redirect:/group/admin";
 	}
 
 	@RequestMapping("/test")
 	public String test() {
-		return  "authorization";
+		return  "group-info-edit";
 	}
 
 	/**

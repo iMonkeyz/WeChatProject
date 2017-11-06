@@ -26,6 +26,10 @@ public class WeChatServiceImpl implements WeChatService {
 	@Autowired
 	private WXGroupDAO wxGroupDAO;
 
+	public WeChatServiceImpl() {
+		LOG.info("===============================================");
+	}
+
 	public Long saveGroupInfo(GroupInfoData groupInfoData) {
 		Long id = null;
 		try {

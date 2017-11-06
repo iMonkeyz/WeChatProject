@@ -6,7 +6,7 @@ import java.util.UUID;
  * Created by Jesse on 2017/9/25.
  */
 public class GroupBaseController {
-	public final static String DOMAIN = "http://g75kza.natappfree.cc/wx";
+	public final static String DOMAIN = "http://cerd6v.natappfree.cc/wx";
 	public final static String APPID = "wxac058681c6aff3a8";
 	public final static String SCOPE = "snsapi_userinfo";
 

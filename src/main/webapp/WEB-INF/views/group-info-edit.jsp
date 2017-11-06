@@ -17,6 +17,7 @@
 	<script src="${pageContext.request.contextPath}/js_css/bootstrap/js/bootstrap.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js_css/datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
 	<script src="${pageContext.request.contextPath}/js_css/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+	<script src="${pageContext.request.contextPath}/js_css/lrz/lrz.bundle.js"></script>
 	<script language="JavaScript">
 		var Control = {
 			init: function () {
@@ -171,7 +172,17 @@
 				fileUpload: function () {
 					$(".input-file:not(.file-qr)").on("change", function () {
 						var img = $(this).data("file-for");
-						if ( this.files || this.files[0] ) {
+
+						lrz(this.files[0], {width: 800}).then(function (rst) {
+							var kb = (rst.fileLen / 1024).toFixed(2);
+							if ( kb > 500 ) {
+								alert("请上传小于500K的图片.")
+								return;
+							}
+							$(img).attr("src", rst.base64);
+						});
+
+						/*if ( this.files || this.files[0] ) {
 							var file = this.files[0];
 							var kb = (file.size / 1024).toFixed(2);
 							if ( kb > 500 ) {
@@ -179,13 +190,16 @@
 								return;
 							}
 							var reader = new FileReader();
-							reader.onloadend = function () {
+							reader.onloadend = function (e) {
+								debugger;
 								var dataURL = reader.result;
 								$(img).attr("src", dataURL);
 							};
 							reader.readAsDataURL(file);
-						}
+						}*/
 					});
+
+
 				},
 				qrUpload: function () {
 					$(".img-qr").on("click", function () {
@@ -194,23 +208,26 @@
 					$(".file-qr").on("change", function () {
 						if ( this.files || this.files[0] ) {
 							var qr = $(".template-qr").clone().removeClass("template-qr");
-							var file = this.files[0];
-							var kb = (file.size / 1024).toFixed(2);
-							if ( kb > 500 ) {
-								alert("请上传小于500K的图片.")
-								return;
-							}
-							var reader = new FileReader();
-							reader.onloadend = function () {
-								var dataURL = reader.result;
-								$(qr).find("img").attr("src", dataURL);
-							};
-							reader.readAsDataURL(file);
+
+							lrz(this.files[0], {width: 800}).then(function (rst) {
+								var kb = (rst.fileLen / 1024).toFixed(2);
+								if ( kb > 500 ) {
+									alert("请上传小于500K的图片.")
+									return;
+								}
+								$(qr).find("img").attr("src", rst.base64);
+							});
+
 							$(".panel-qr").prepend(qr);
 							$(this).val("");
 						}
 
 					});
+				}
+			},
+			Utils: {
+				compressImage: function () {
+
 				}
 			}
 		};
@@ -252,7 +269,7 @@
 						</div>
 						<c:set var="defaultBanner" value="${pageContext.request.contextPath}/img/default_banner.png"/>
 						<img class="img-responsive center-block img-banner" src="${empty groupInfo ? defaultBanner : groupInfo.banner}">
-						<input type="file" class="input-file file-banner" data-file-for=".img-banner"/>
+						<input type="file" accept="image/*" class="input-file file-banner" data-file-for=".img-banner"/>
 					</div>
 				</div>
 			</div>
@@ -298,7 +315,7 @@
 									<div class="media-left text-center">
 										<c:set var="defaultAvatar" value="${pageContext.request.contextPath}/img/avatar.png"/>
 										<img class="media-object img-circle img-avatar" src="${empty groupInfo ? defaultAvatar : groupInfo.avatar}">
-										<input type="file" class="input-file file-avatar" data-file-for=".img-avatar"/>
+										<input type="file" accept="image/*" class="input-file file-avatar" data-file-for=".img-avatar"/>
 										<button class="btn btn-xs btn-primary btn-file-upload" data-trigger-of=".file-avatar">头像上传</button>
 									</div>
 									<div class="media-body">
@@ -374,7 +391,7 @@
 						</div>
 					</div>
 					<div class="col-xs-12">
-						<input type="file" class="input-file file-qr"/>
+						<input type="file" accept="image/*" class="input-file file-qr"/>
 						<fieldset disabled>
 							<div class="input-group input-group-sm">
 								<span class="input-group-addon">限制分享次数</span>

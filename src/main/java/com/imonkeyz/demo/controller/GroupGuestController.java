@@ -65,14 +65,26 @@ public class GroupGuestController extends GroupBaseController {
 	 * @return
 	 */
 	@RequestMapping(value = "/share", method = RequestMethod.GET)
-	public String share(@RequestParam(required = false) String code, @RequestParam(value = "state") Long id, ModelMap map) {
+	public String shareAuth(@RequestParam(required = false) String code, @RequestParam(value = "state") Long id, ModelMap map) {
 		UserInfoData userInfoData = WxUtil.getUserInfo(code);
 		GroupInfoData groupInfoData = weChatService.findGroupInfo(id);
 
-		//保存用户信息到session
-		request.getSession().setAttribute(WeChatConstants.SESSION_GUEST, userInfoData.getOpenId());
+		if ( userInfoData.getErrCode() == null ) {
+			//保存用户信息到session
+			request.getSession().setAttribute(WeChatConstants.SESSION_GUEST, userInfoData);
+		} else {
+			return "index";
+		}
+		return "redirect:/group/share/" + id;
+	}
 
-		map.put("userInfo", userInfoData);
+	@RequestMapping("/share/{id}")
+	public String share(@PathVariable Long id, ModelMap map) {
+		Object o = request.getSession().getAttribute(WeChatConstants.SESSION_GUEST);
+		if ( o == null ) {
+			return "redirect:/group/qr/scan/" + id;
+		}
+		GroupInfoData groupInfoData = weChatService.findGroupInfo(id);
 		map.put("groupInfo", groupInfoData);
 		return "group-info-page";
 	}
@@ -86,8 +98,8 @@ public class GroupGuestController extends GroupBaseController {
 	@WeChatGuestRequired
 	@RequestMapping(value = "/share/{id}/join", method = RequestMethod.GET)
 	public String groupJoin(@PathVariable String id, ModelMap map) {
-		String openId = (String) request.getSession().getAttribute(WeChatConstants.SESSION_GUEST);
-		String qrData = weChatService.qr2OpendId(id, openId);
+		UserInfoData user = (UserInfoData) request.getSession().getAttribute(WeChatConstants.SESSION_GUEST);
+		String qrData = weChatService.qr2OpendId(id, user.getOpenId());
 		map.addAttribute("qrData", qrData);
 		return "group-join";
 	}
