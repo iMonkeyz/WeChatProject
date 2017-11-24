@@ -50,7 +50,7 @@ public class GroupAdminController extends GroupBaseController{
 	@RequestMapping(method = RequestMethod.GET)
 	public String admin(ModelMap map) {
 		HttpSession session = request.getSession();
-		Object o = session.getAttribute("ADMIN");
+		Object o = session.getAttribute(WeChatConstants.SESSION_ADMIN);
 		if ( o != null ) {
 			UserInfoData admin = (UserInfoData) o;
 			List<GroupInfoData> groupInfos = weChatService.findAllFullGroupInfoByOpenId(admin.getOpenId());
@@ -91,10 +91,10 @@ public class GroupAdminController extends GroupBaseController{
 		String imgData = encoder.encode(imageBytes);
 		bos.close();
 
-		request.getSession().setAttribute("AUTH_UUID", uuid);
+		request.getSession().setAttribute(WeChatConstants.SESSION_AUTH_UUID, uuid);
 		request.getSession().setAttribute("AUTH_UUID_TSM", tsm);
 
-		return new QRCodeData(tsm, imgData);
+		return new QRCodeData(uuid, imgData);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class GroupAdminController extends GroupBaseController{
 	public void makeAdminQr(HttpServletResponse response) throws IOException {
 		//1. 清理上次的UUID
 		HttpSession session = request.getSession();
-		Object lastUUID = session.getAttribute("AUTH_UUID");
+		Object lastUUID = session.getAttribute(WeChatConstants.SESSION_AUTH_UUID);
 		if ( lastUUID != null ) {
 			weChatService.removeAuthToken( lastUUID.toString() );
 		}
@@ -114,7 +114,7 @@ public class GroupAdminController extends GroupBaseController{
 		String uuid = randomUUID();
 		long tsm = System.currentTimeMillis();
 
-		session.setAttribute("AUTH_UUID", uuid);
+		session.setAttribute(WeChatConstants.SESSION_AUTH_UUID, uuid);
 		weChatService.saveAuthToken(new AuthTokenData(uuid, tsm));
 
 		BufferedImage img = QRUtil.qRCodeBufImg(DOMAIN + "/group/admin/qr/scan/" + uuid);
@@ -235,6 +235,12 @@ public class GroupAdminController extends GroupBaseController{
 		return "group-info-page";
 	}
 
+	@WeChatAdminRequired
+	@RequestMapping(value = "/remove/{id}", method = RequestMethod.GET)
+	public @ResponseBody boolean removeGroupInfo(@PathVariable Long id) {
+		return weChatService.removeGroupInfo(id);
+	}
+
 	/**
 	 * Ajax方式生成群信息分享二维码
 	 * @param id
@@ -252,7 +258,7 @@ public class GroupAdminController extends GroupBaseController{
 		String imgData = encoder.encode(imageBytes);
 		bos.close();
 
-		return new QRCodeData(id, imgData);
+		return new QRCodeData(String.valueOf(id), imgData);
 	}
 
 	/**

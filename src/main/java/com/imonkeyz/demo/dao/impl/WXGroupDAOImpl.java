@@ -4,6 +4,7 @@ import com.imonkeyz.demo.dao.WXGroupDAO;
 import com.imonkeyz.demo.entity.AuthTokenData;
 import com.imonkeyz.demo.entity.GroupInfoData;
 import com.imonkeyz.demo.entity.PanelInfoData;
+import com.imonkeyz.demo.entity.QRCodeData;
 import org.apache.log4j.Logger;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +69,10 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 		clearQR(conn, id);
 		String sql = "INSERT INTO WXGROUP.QR (ID, INFOID, DATA) VALUES(?, ?, ?)";
 		PreparedStatement pst = conn.prepareStatement(sql);
-		for (String qr : groupInfoData.getQrs()) {
+		for (QRCodeData qr : groupInfoData.getQrs()) {
 			pst.setString(1, UUID.randomUUID().toString().replaceAll("-", ""));
 			pst.setLong(2, id);
-			pst.setString(3, qr);
+			pst.setString(3, qr.getData());
 			pst.addBatch();
 		}
 		pst.executeBatch();
@@ -91,7 +92,7 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 
 	public GroupInfoData findGroupInfoByID(Long id, boolean editMode) throws SQLException {
 		GroupInfoData groupInfoData = null;
-		String sql = " SELECT * FROM WXGROUP.INFO WHERE ID=? ";
+		String sql = " SELECT * FROM WXGROUP.INFO WHERE ID=? AND STATE='000' ";
 		Connection conn = h2dbcp.getConnection();
 		PreparedStatement pst = conn.prepareStatement(sql);
 		pst.setLong(1, id);
@@ -103,7 +104,7 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 			String banner = rs.getString("BANNER");
 			String avatar = rs.getString("AVATAR");
 			List<PanelInfoData> infos = getPanels(conn, id);
-			List<String> qrs = null;
+			List<QRCodeData> qrs = null;
 			if ( editMode ) {
 				qrs = getQrs(conn, id);
 			}
@@ -127,26 +128,38 @@ public class WXGroupDAOImpl implements WXGroupDAO {
 		return infos;
 	}
 
-	private List<String> getQrs(Connection conn, Long id) throws SQLException {
-		List<String> qrs = new ArrayList<String>();
-		String sql = " SELECT * FROM WXGROUP.QR WHERE INFOID=? ";
+	private List<QRCodeData> getQrs(Connection conn, Long infoId) throws SQLException {
+		List<QRCodeData> qrs = new ArrayList<QRCodeData>();
+		String sql =" SELECT ID, 0 as COUNTER, DATA FROM WXGROUP.QR A WHERE A.INFOID=? AND NOT EXISTS( SELECT 1 FROM WXGROUP.QR2OPENID WHERE A.ID=QRID ) " +
+					" UNION " +
+					" SELECT qr.ID, COUNT(1) as COUNTER, qr.DATA FROM WXGROUP.QR qr JOIN WXGROUP.QR2OPENID qo ON qr.ID = qo.QRID WHERE qr.INFOID=? GROUP BY qr.ID " +
+					"";
 		PreparedStatement pst = conn.prepareStatement(sql);
-		pst.setLong(1, id);
+		pst.setLong(1, infoId);
+		pst.setLong(2, infoId);
 		ResultSet rs = pst.executeQuery();
 		while ( rs.next() ) {
+			String uuid = rs.getString("ID");
 			String data = rs.getString("DATA");
-			qrs.add(data);
+			int counter = rs.getInt("COUNTER");
+			qrs.add(new QRCodeData(uuid, data, counter));
 		}
 		return qrs;
 	}
 
-	public boolean removeGroupInfoByID(Long id) {
-		return false;
+	public boolean removeGroupInfoByID(Long id) throws SQLException {
+		String sql = " UPDATE WXGROUP.INFO SET STATE='100' WHERE ID=? ";
+		Connection conn = h2dbcp.getConnection();
+		PreparedStatement pst = conn.prepareStatement(sql);
+		pst.setLong(1, id);
+		int i = pst.executeUpdate();
+		conn.close();
+		return i > 0;
 	}
 
 	public List<GroupInfoData> findAllGroupInfoByOpenId(String openID, boolean isFull) throws Exception {
 		List<GroupInfoData> list = new ArrayList<GroupInfoData>();
-		String sql = " SELECT * FROM WXGROUP.INFO WHERE OPENID=? ";
+		String sql = " SELECT * FROM WXGROUP.INFO WHERE OPENID=? AND STATE='000' ";
 		Connection conn = h2dbcp.getConnection();
 		PreparedStatement pst = conn.prepareStatement(sql);
 		pst.setString(1, openID);

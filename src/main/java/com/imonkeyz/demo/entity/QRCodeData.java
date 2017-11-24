@@ -11,6 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QRCodeData {
-	private long uuid;
+	private String uuid;
 	private String data;
+	private int counter;
+
+	public QRCodeData(String uuid, String data) {
+		this.uuid = uuid;
+		this.data = data;
+	}
+
+	public QRCodeData(String data, int counter) {
+		this.data = data;
+		this.counter = counter;
+	}
 }

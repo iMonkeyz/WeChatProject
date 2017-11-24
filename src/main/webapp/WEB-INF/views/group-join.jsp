@@ -26,6 +26,7 @@
 			top: 0;
 		}
 		.mask-footer {
+			height: 50px;
 			bottom: 0;
 		}
 		.mask-footer.desc-text {

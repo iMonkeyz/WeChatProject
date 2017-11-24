@@ -19,7 +19,7 @@ public class GroupInfoData {
 	private String banner;
 	private String avatar;
 	private List<PanelInfoData> infos;
-	private List<String> qrs;
+	private List<QRCodeData> qrs;
 
 	private String openId;
 
@@ -38,7 +38,7 @@ public class GroupInfoData {
 		this.infos = infos;
 	}
 
-	public GroupInfoData(Long id, String name, String datetime, String intro, String banner, String avatar, List<PanelInfoData> infos, List<String> qrs) {
+	public GroupInfoData(Long id, String name, String datetime, String intro, String banner, String avatar, List<PanelInfoData> infos, List<QRCodeData> qrs) {
 		this.id = id;
 		this.name = name;
 		this.datetime = datetime;

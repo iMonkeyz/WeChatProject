@@ -21,13 +21,13 @@ public class H2ServerStartup {
 	private final static String SQL_SCHEMA = "CREATE SCHEMA WXGROUP";
 
 	private final static String TABLE_INFO = "INFO";
-	private final static String SQL_WXGROUP_INFO = "create table WXGROUP.INFO (ID bigint primary key, OPENID varchar(32) not null, NAME varchar(255) not null, DATETIME varchar(16), INTRO text, BANNER text, AVATAR longtext, QR text)";
+	private final static String SQL_WXGROUP_INFO = "create table WXGROUP.INFO (ID bigint primary key, OPENID varchar(32) not null, NAME varchar(255) not null, DATETIME varchar(16), INTRO text, BANNER text, AVATAR longtext, STATE varchar(3) not null default '000')";
 
 	private final static String TABLE_PANEL = "PANEL";
 	private final static String SQL_WXGROUP_PANEL = "create table WXGROUP.PANEL (ID int auto_increment primary key, INFOID bigint not null, TITLE varchar(255), CONTENT text)";
 
 	private final static String TABLE_QR = "QR";
-	private final static String SQL_WXGROUP_QR = "create table WXGROUP.QR (ID varchar(32) primary key, INFOID bigint not null, DATA text)";
+	private final static String SQL_WXGROUP_QR = "create table WXGROUP.QR (ID varchar(32) primary key, INFOID bigint not null, DATA text not null)";
 
 	private final static String TABLE_QR2OPENID = "QR2OPENID";
 	private final static String SQL_WXGROUP_QR2OPENID = "create table WXGROUP.QR2OPENID(ID int auto_increment, QRID varchar(32) not null, OPENID varchar(32) not null, primary key (QRID, OPENID))";
@@ -66,6 +66,7 @@ public class H2ServerStartup {
 			initTable(TABLE_PANEL, SQL_WXGROUP_PANEL);
 			initTable(TABLE_QR, SQL_WXGROUP_QR);
 			initTable(TABLE_QR2OPENID, SQL_WXGROUP_QR2OPENID);
+			initTable(TABLE_AUTH, SQL_WXGROUP_AUTH);
 			LOG.info("Database is OK !");
 			LOG.info("Database Status: MaxConnections = " + h2dbcp.getMaxConnections() + ", ActiveConnections = " + h2dbcp.getActiveConnections());
 

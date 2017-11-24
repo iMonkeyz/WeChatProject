@@ -46,7 +46,7 @@ public class WeChatServiceImpl implements WeChatService {
 		try {
 			groupInfoData = wxGroupDAO.findGroupInfoByID(id, false);
 		} catch (SQLException e) {
-			LOG.error("Errors while accessing GroupInfo by id: " + id, e);
+			LOG.error("Errors while accessing GroupInfo by ID: " + id, e);
 		}
 		return groupInfoData;
 	}
@@ -56,12 +56,17 @@ public class WeChatServiceImpl implements WeChatService {
 		try {
 			groupInfoData = wxGroupDAO.findGroupInfoByID(id, true);
 		} catch (SQLException e) {
-			LOG.error("Errors while accessing GroupInfo by id: " + id, e);
+			LOG.error("Errors while accessing GroupInfo by ID: " + id, e);
 		}
 		return groupInfoData;
 	}
 
 	public boolean removeGroupInfo(Long id) {
+		try {
+			return wxGroupDAO.removeGroupInfoByID(id);
+		} catch (SQLException e) {
+			LOG.error("Errors while removing GroupInfo by ID: " + id, e);
+		}
 		return false;
 	}
 

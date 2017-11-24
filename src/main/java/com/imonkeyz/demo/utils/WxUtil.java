@@ -34,6 +34,10 @@ public class WxUtil {
 			.build();
 
 
+	/**
+	 * 根据APPID和SECRET获取AccessToken
+	 * @return
+	 */
 	public static AccessTokenData getToken() {
 		String url = TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET);
 		JsonObject json = getJSON(url);
@@ -47,9 +51,15 @@ public class WxUtil {
 		return accessTokenData;
 	}
 
+	/**
+	 * 通过code换取网页授权access_token
+	 * @param code
+	 * @return
+	 */
 	public static AccessTokenData getAccessToken(String code) {
 		AccessTokenData accessTokenData = accessTokenMap.get(code);
-		if (accessTokenData == null) {
+		if ( accessTokenData == null || accessTokenData.isExpired() ) {
+			LOG.info("缓存中未取得有效的AccessToken, 正在重新获取...");
 			String url = ACCESS_TOKEN_URL.replace("APPID", APPID).replace("SECRET", APPSECRET).replace("CODE", code);
 			JsonObject json = getJSON(url);
 
@@ -61,18 +71,23 @@ public class WxUtil {
 					String openid = json.get("openid").getAsString();
 					String scope = json.get("scope").getAsString();
 					accessTokenData = new AccessTokenData(accessToken, expiresIn, refreshToken, openid, scope);
+					accessTokenMap.put(code, accessTokenData);
 				} else {
 					String errcode = json.get("errcode").getAsString();
 					String errmsg = json.get("errmsg").getAsString();
 					accessTokenData = new AccessTokenData(errcode, errmsg);
 				}
 			}
-			accessTokenMap.put(code, accessTokenData);
 		}
 		LOG.info("获取到AccessTokenData=" + accessTokenData);
 		return accessTokenData;
 	}
 
+	/**
+	 * 通过Code获取用户信息
+	 * @param code
+	 * @return
+	 */
 	public static UserInfoData getUserInfo(String code) {
 		UserInfoData userInfoData = null;
 		AccessTokenData accessToken = getAccessToken(code);
@@ -108,6 +123,11 @@ public class WxUtil {
 		return userInfoData;
 	}
 
+	/**
+	 * 解析接口返回JSON数据
+	 * @param url
+	 * @return
+	 */
 	private static JsonObject getJSON(final String url) {
 		LOG.info("GET " + url);
 		HttpGet get = new HttpGet(url);

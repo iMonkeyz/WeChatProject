@@ -108,7 +108,9 @@
 						//QRs
 						var qrs = [];
 						$(".item-qr:not(.template-qr)").each(function () {
-							qrs.push($(this).find(".img-qr").attr("src"));
+							qrs.push({
+								data: $(this).find(".img-qr").attr("src")
+							});
 						});
 
 						var data = {
@@ -372,14 +374,15 @@
 					<h3 class="panel-title">第 3 步: 设定群二维码</h3>
 				</div>
 				<div class="panel-body text-center panel-qr">
-					<c:forEach items="${groupInfo.qrs}" var="qrData">
+					<c:forEach items="${groupInfo.qrs}" var="qr">
 						<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 item-qr">
 							<div class="ui-flex justify-center center content-qr">
 								<div class="btn-remove-qr">
 									<a class="btn btn-xs btn-danger glyphicon glyphicon-trash"></a>
 								</div>
-								<img src="${qrData}" class="img-responsive center-block img-qr">
+								<img src="${qr.data}" class="img-responsive center-block img-qr">
 							</div>
+							<span class="desc-text">曝光 ${qr.counter} 次</span>
 						</div>
 					</c:forEach>
 					<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 item-qr template-qr">

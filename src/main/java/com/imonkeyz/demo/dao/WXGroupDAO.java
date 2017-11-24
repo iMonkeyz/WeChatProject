@@ -9,7 +9,7 @@ import java.util.List;
 public interface WXGroupDAO {
 	public Long saveGroupInfo(GroupInfoData groupInfoData) throws SQLException;
 	public GroupInfoData findGroupInfoByID(Long id, boolean editMode) throws SQLException;
-	public boolean removeGroupInfoByID(Long id);
+	public boolean removeGroupInfoByID(Long id) throws SQLException;
 
 	/**
 	 * 根据OPENID查找所有GroupInfo
